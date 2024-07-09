@@ -19,3 +19,23 @@ export const deleteCabin = async (id: number) => {
     throw new Error("Cabins can not be loaded");
   }
 };
+
+export const createCabin = async (newCabin: {
+  name: string;
+  maxCapacity: number;
+  regularPrice: number;
+  discount: number;
+  description: string;
+}) => {
+  const { data, error } = await supabase
+    .from("cabins")
+    .insert([newCabin])
+    .select();
+
+  if (error) {
+    console.error(error);
+    throw new Error("Cabins can not be loaded");
+  }
+
+  return data;
+};

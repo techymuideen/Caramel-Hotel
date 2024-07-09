@@ -17,7 +17,8 @@ const Row: React.FC<{
     props.direction === "vertical" &&
     css`
       flex-direction: column;
-      align-items: baseline;
+      align-items: stretch;
+      justify-content: space-between;
       gap: 1.6rem;
     `}
 `;

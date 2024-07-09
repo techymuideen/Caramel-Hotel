@@ -18,7 +18,7 @@ const App = () => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        staleTime: 10 * 1000,
+        staleTime: 0,
       },
     },
   });

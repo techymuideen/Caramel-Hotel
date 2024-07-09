@@ -1,8 +1,7 @@
-import React from "react";
 import styled, { css } from "styled-components";
-// import { deleteBooking } from "../services/apiBookings";
 
-const sizes: Record<string, object> = {
+// Define sizes and variations with `as const` to infer exact types
+const sizes = {
   small: css`
     font-size: 1.2rem;
     padding: 0.4rem 0.8rem;
@@ -20,9 +19,9 @@ const sizes: Record<string, object> = {
     padding: 1.2rem 2.4rem;
     font-weight: 500;
   `,
-};
+} as const;
 
-const variations: Record<string, object> = {
+const variations = {
   primary: css`
     color: var(--color-brand-50);
     background-color: var(--color-brand-600);
@@ -48,21 +47,32 @@ const variations: Record<string, object> = {
       background-color: var(--color-red-800);
     }
   `,
-};
+} as const;
 
-const Button: React.FC<{
-  children: React.ReactNode;
-  size: string;
-  variation: string;
-}> = styled.button`
+// Define props interface with optional size and variation
+interface ButtonProps {
+  size?: keyof typeof sizes; // Should match keys of sizes object
+  variation?: keyof typeof variations; // Should match keys of variations object
+}
+
+// Styled button component with TypeScript
+const Button = styled.button<ButtonProps>`
   border: none;
   border-radius: var(--border-radius-sm);
   box-shadow: var(--shadow-sm);
 
-  ${(props) => sizes[size]}
-  ${(props) => variations[props.variation]}
+  ${(props) =>
+    sizes[
+      props.size || "medium"
+    ]}; // Default to medium size if size prop is not provided
+
+  ${(props) =>
+    variations[
+      props.variation || "primary"
+    ]}; // Default to primary variation if variation prop is not provided
 `;
 
+// Default props assignment
 Button.defaultProps = {
   variation: "primary",
   size: "medium",
