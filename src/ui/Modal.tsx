@@ -1,4 +1,15 @@
+import {
+  cloneElement,
+  createContext,
+  ReactNode,
+  useContext,
+  useState,
+  FC,
+} from "react";
+import { createPortal } from "react-dom";
+import { HiXMark } from "react-icons/hi2";
 import styled from "styled-components";
+import { useOutsideClick } from "../hooks/useOutsideClick";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -48,3 +59,78 @@ const Button = styled.button`
     color: var(--color-grey-500);
   }
 `;
+
+interface ModalContextType {
+  close: () => void;
+  open: (name: string) => void;
+  openName: string;
+}
+
+const ModalContext = createContext<ModalContextType>({
+  close: () => {},
+  open: () => {},
+  openName: "",
+});
+
+interface ModalProps {
+  children: ReactNode;
+}
+
+const Modal: FC<ModalProps> & {
+  Window: FC<{ name: string; children: ReactNode }>;
+  Open: FC<{ opens: string; children: ReactNode }>;
+} = ({ children }) => {
+  const [openName, setOpenName] = useState("");
+
+  const close = () => setOpenName("");
+
+  const open = (name: string) => setOpenName(name);
+
+  return (
+    <ModalContext.Provider value={{ close, open, openName }}>
+      {children}
+    </ModalContext.Provider>
+  );
+};
+
+const Open: FC<{ opens: string; children: ReactNode }> = ({
+  opens: openWindowName,
+  children,
+}) => {
+  const { open } = useContext(ModalContext);
+  return cloneElement(children as React.ReactElement, {
+    onClick: () => open(openWindowName),
+  });
+};
+
+const Window: FC<{ name: string; children: ReactNode }> = ({
+  children,
+  name,
+}) => {
+  const { openName, close } = useContext(ModalContext);
+
+  const ref = useOutsideClick(close);
+
+  if (openName !== name) return null;
+
+  return createPortal(
+    <Overlay>
+      <StyledModal ref={ref}>
+        <Button onClick={close}>
+          <HiXMark />
+        </Button>
+        <div>
+          {cloneElement(children as React.ReactElement, {
+            onCloseModal: close,
+          })}
+        </div>
+      </StyledModal>
+    </Overlay>,
+    document.body,
+  );
+};
+
+Modal.Window = Window;
+Modal.Open = Open;
+
+export default Modal;

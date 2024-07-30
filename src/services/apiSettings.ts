@@ -1,3 +1,4 @@
+import { SettingsValues } from "../models/settings";
 import supabase from "./supabase";
 
 export async function getSettings() {
@@ -11,7 +12,7 @@ export async function getSettings() {
 }
 
 // We expect a newSetting object that looks like {setting: newValue}
-export async function updateSetting(newSetting) {
+export async function updateSettings(newSetting: SettingsValues) {
   const { data, error } = await supabase
     .from("settings")
     .update(newSetting)

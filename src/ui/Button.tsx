@@ -1,6 +1,6 @@
-import styled, { css } from "styled-components";
+import styled, { css, CSSProp } from "styled-components";
 
-// Define sizes and variations with `as const` to infer exact types
+// Define sizes with `as const` to infer exact types
 const sizes = {
   small: css`
     font-size: 1.2rem;
@@ -21,7 +21,8 @@ const sizes = {
   `,
 } as const;
 
-const variations = {
+// Define variations explicitly with the appropriate types
+const variations: { primary: CSSProp; secondary: CSSProp; danger: CSSProp } = {
   primary: css`
     color: var(--color-brand-50);
     background-color: var(--color-brand-600);
@@ -52,7 +53,7 @@ const variations = {
 // Define props interface with optional size and variation
 interface ButtonProps {
   size?: keyof typeof sizes; // Should match keys of sizes object
-  variation?: keyof typeof variations; // Should match keys of variations object
+  $variation?: keyof typeof variations; // Should match keys of variations object
 }
 
 // Styled button component with TypeScript
@@ -68,13 +69,13 @@ const Button = styled.button<ButtonProps>`
 
   ${(props) =>
     variations[
-      props.variation || "primary"
+      props.$variation || "primary"
     ]}; // Default to primary variation if variation prop is not provided
 `;
 
 // Default props assignment
 Button.defaultProps = {
-  variation: "primary",
+  $variation: "primary",
   size: "medium",
 };
 
