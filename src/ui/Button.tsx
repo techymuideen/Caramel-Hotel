@@ -69,13 +69,13 @@ const Button = styled.button<ButtonProps>`
 
   ${(props) =>
     variations[
-      props.$variation || "primary"
+      props.variation || "primary"
     ]}; // Default to primary variation if variation prop is not provided
 `;
 
 // Default props assignment
 Button.defaultProps = {
-  $variation: "primary",
+  variation: "primary",
   size: "medium",
 };
 
