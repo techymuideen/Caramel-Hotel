@@ -19,9 +19,9 @@ const SideBar = () => {
     <StyledSideBar>
       <Logo />
       <MainNav />
-      <Uploader />
+      {/* <Uploader /> */}
     </StyledSideBar>
   );
 };
- 
+
 export default SideBar;
