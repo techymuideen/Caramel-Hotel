@@ -148,6 +148,16 @@ const DurationChart = ({ confirmedStays }) => {
 
   const data = prepareData(startData, confirmedStays);
 
+  const colors = isDarkMode
+    ? {
+        text: "#e5e7eb",
+        background: "#18212f",
+      }
+    : {
+        text: "#374151",
+        background: "#fff",
+      };
+
   return (
     <ChartBox>
       <Heading as="h2">Stay duration summary</Heading>
@@ -171,7 +181,12 @@ const DurationChart = ({ confirmedStays }) => {
               />
             ))}
           </Pie>
-          <Tooltip />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: colors.background,
+              color: colors.text + " !important",
+            }}
+          />
           <Legend
             verticalAlign="middle"
             align="right"
